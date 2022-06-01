@@ -46,9 +46,9 @@ namespace CommentsPlus.ItalicComments
 
             try
             {
-                using (var subKey = Registry.CurrentUser.OpenSubKey("Software\\CommentsPlus", false))
+                using (var subKey = Registry.CurrentUser.OpenSubKey("Software\\hlwComments", false))
                 {
-                    int value = Convert.ToInt32(subKey.GetValue("EnableItalics", 1));
+                    int value = Convert.ToInt32(subKey == null? 1 : subKey.GetValue("EnableItalics", 1));
                     res = value != 0;
                 }
             }

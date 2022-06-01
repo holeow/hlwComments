@@ -42,14 +42,17 @@ namespace CommentsPlus.CommentClassifier
 
         static bool _enabled;
 
-        static readonly string[] Comments = { "//", "'", "#", "<!--"/*, "/*"*/ };
+        static readonly string[] Comments = { "///","//", "'", "#", "<!--" ,/*, "/*"*/ };
 
         static readonly string[] ImportantComments = { "! ", "# " }; // #! Shebang not really useful in Python and the like since it already has a meaning!?
-        static readonly string[] QuestionComments = { "? " };
-        static readonly string[] WtfComments = { "!? ", "‽ ", "WTF ", "WTF: "/*, "WAT ", "WAT: "*/ }; //ಠ_ಠ
+        static readonly string[] SubComments = { "? ","sub ", "zone " };
+        static readonly string[] RessourceComments = { ">> ", "src ", "ressource ", "url ", "guide ", "see "/*, "WAT ", "WAT: "*/ }; //ಠ_ಠ
         static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//" };
         static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
-        static readonly string[] RainbowComments = { "+? " }; //シ  
+        static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
+        static readonly string[] ChapterComments = { "?? ", "chapter ","ch " }; //シ
+        static readonly string[] PatternComments = {"++ ", "singleton ", "notify ", "dispose ", "constructor ", "finalizer "};
+
 
         static readonly List<ITagSpan<ClassificationTag>> EmptyTags = new List<ITagSpan<ClassificationTag>>();
 
@@ -59,13 +62,13 @@ namespace CommentsPlus.CommentClassifier
 
         internal CommentTagger(IClassificationTypeRegistryService registry, ITagAggregator<IClassificationTag> aggregator)
         {
-            _classifications = new string[] { Constants.ImportantComment, Constants.QuestionComment, Constants.WtfComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment }
+            _classifications = new string[] { Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment}
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.QuestionHtmlComment, Constants.WtfComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment }
+            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.QuestionXmlComment, Constants.WtfComment, Constants.RemovedXmlComment, Constants.TaskXmlComment }
+            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
             _aggregator = aggregator;
@@ -82,9 +85,9 @@ namespace CommentsPlus.CommentClassifier
 
             try
             {
-                using (var subKey = Registry.CurrentUser.OpenSubKey("Software\\CommentsPlus", false))
+                using (var subKey = Registry.CurrentUser.OpenSubKey("Software\\hlwComments", false))
                 {
-                    int value = Convert.ToInt32(subKey.GetValue("EnableTags", 1));
+                    int value = Convert.ToInt32(subKey== null ?  1 : subKey.GetValue("EnableTags", 1));
                     res = value != 0;
                 }
             }
@@ -145,7 +148,7 @@ namespace CommentsPlus.CommentClassifier
                 // find spans that the language service has already classified as comments ...
                 string classificationName = tagSpan.Tag.ClassificationType.Classification;
                 if (!classificationName.Contains("comment", StringComparison.OrdinalIgnoreCase))
-                    continue;
+                   continue;
 
                 var nssc = tagSpan.Span.GetSpans(snapshot);
                 if (nssc.Count > 0)
@@ -195,9 +198,17 @@ namespace CommentsPlus.CommentClassifier
                     {
                         ctag = lookup[Classification.Important];
                     }
-                    else if (Match(text, startIndex, QuestionComments, out match))
+                    else if (Match(text, startIndex, SubComments, out match))
                     {
-                        ctag = lookup[Classification.Question];
+                        ctag = lookup[Classification.Sub];
+                    }
+                    else if (Match(text, startIndex, PatternComments, out match))
+                    {
+                        ctag = lookup[Classification.Pattern];
+                    }
+                    else if (Match(text, startIndex, ChapterComments, out match))
+                    {
+                        ctag = lookup[Classification.Chapter];
                     }
                     else if (Match(text, startIndex, RemovedComments, out match))
                     {
@@ -222,9 +233,9 @@ namespace CommentsPlus.CommentClassifier
                         bool fix = FixTaskComment(text, startIndex, ref match);
                         ctag = lookup[Classification.Task];
                     }
-                    else if (Match(text, startIndex, WtfComments, out match))
+                    else if (Match(text, startIndex, RessourceComments, out match))
                     {
-                        ctag = lookup[Classification.Wtf];
+                        ctag = lookup[Classification.Ressource];
                     }
                     else if (Match(text, startIndex, RainbowComments, out match))
                     {
@@ -235,9 +246,9 @@ namespace CommentsPlus.CommentClassifier
                     {
                         int matchLength = commentType.Length + match.Length;
 
-                        int spanLength = /*removedSpanLength ??*/ (snapshotSpan.Length - (matchLength + endTokenLength));
+                        int spanLength = /*removedSpanLength ??*/ (snapshotSpan.Length /*- (matchLength + endTokenLength)*/);
 
-                        var span = new SnapshotSpan(snapshotSpan.Snapshot, snapshotSpan.Start + matchLength, spanLength);
+                        var span = new SnapshotSpan(snapshotSpan.Snapshot, snapshotSpan.Start /*+ matchLength*/, spanLength);
                         var outTagSpan = new TagSpan<ClassificationTag>(span, ctag);
 
                         if (resultTags == null)
@@ -290,18 +301,26 @@ namespace CommentsPlus.CommentClassifier
         {
             if (s.Contains("Important"))
                 return Classification.Important;
-            if (s.Contains("Question"))
-                return Classification.Question;
+            if (s.Contains("Sub"))
+                return Classification.Sub;
             if (s.Contains("Removed"))
                 return Classification.Removed;
             if (s.Contains("Task"))
                 return Classification.Task;
-            if (s.Contains("WAT"))
-                return Classification.Wtf;
+            if (s.Contains("Ressource"))
+                return Classification.Ressource;
             if (s.Contains("Rainbow"))
                 return Classification.Rainbow;
+            if (s.Contains("Chapter"))
+            {
+                return Classification.Chapter;
+            }
+            if (s.Contains("Pattern"))
+            {
+                return Classification.Pattern;
+            }
 
-            throw new ArgumentException("Unknown classification type");
+            throw new ArgumentException($"Unknown classification type");
         }
 
         private bool IsMarkup(IContentType contentType)

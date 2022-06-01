@@ -43,50 +43,70 @@ namespace CommentsPlus.CommentClassifier
     {
         None,
         Important,
-        Question,
-        Wtf,
+        Sub,
+        Ressource,
         Removed,
         Task,
-        Rainbow
+        Rainbow,
+        Chapter,
+        Pattern
     }
 
     /*!? Normal comment - should be italics '*/
     static class Constants
     {
         //! Important
-        public const string ImportantComment = "Comment - Important";
-        public const string ImportantHtmlComment = "HTML Comment - Important";
-        public const string ImportantXmlComment = "XML Comment - Important";
+        public const string ImportantComment = "hlwComment - Important";
+        public const string ImportantHtmlComment = "hlwComment HTML - Important";
+        public const string ImportantXmlComment = "hlwComment XML - Important";
         //? Question
-        public const string QuestionComment = "Comment - Question";
-        public const string QuestionHtmlComment = "HTML Comment - Question";
-        public const string QuestionXmlComment = "XML Comment - Question";
+        public const string SubComment = "hlwComment - Sub";
+        public const string SubHtmlComment = "hlwComment HTML - Sub";
+        public const string SubXmlComment = "hlwComment XML - Sub";
         //!? WAT
-        public const string WtfComment = "Comment - WAT!?";
+        public const string RessourceComment = "hlwComment - Ressource";
 
         //x Removed
-        public const string RemovedComment = "Comment - Removed";
-        public const string RemovedHtmlComment = "HTML Comment - Removed";
-        public const string RemovedXmlComment = "XML Comment - Removed";
+        public const string RemovedComment = "hlwComment - Removed";
+        public const string RemovedHtmlComment = "hlwComment HTML - Removed";
+        public const string RemovedXmlComment = "hlwComment XML - Removed";
         //TODO: This does not need work
-        public const string TaskComment = "Comment - Task";
-        public const string TaskHtmlComment = "HTML Comment - Task";
-        public const string TaskXmlComment = "XML Comment - Task";
+        public const string TaskComment = "hlwComment - Task";
+        public const string TaskHtmlComment = "hlwComment HTML - Task";
+        public const string TaskXmlComment = "hlwComment XML - Task";
 
-        public const string RainbowComment = "Comment - Rainbow";
+        public const string RainbowComment = "hlwComment - Rainbow";
+
+        public const string ChapterComment = "hlwComment - Chapter";
+        public const string ChapterHtmlComment = "hlwComment HTML - Chapter";
+        public const string ChapterXmlComment = "hlwComment XML - Chapter";
+
+        public const string PatternComment = "hlwComment - Pattern";
 
         //x public const string LargeComment = "Comment + Large";
         //x public const string LargerComment = "Comment ++ Large";
 
-        public static readonly Color ImportantColor = Colors.Green;
-        public static readonly Color QuestionColor = Colors.Red;
-        public static readonly Color WtfColor = Colors.Purple;
+        public static readonly Color ImportantColor = Colors.Red;
+        public static readonly Color SubColor = Color.FromRgb(255, 0, 255);
+        public static readonly Color WtfColor = Colors.DarkSeaGreen;
         public static readonly Color RemovedColor = Colors.Gray;
-        public static readonly Color TaskColor = Color.FromRgb(192, 96, 0);
+        public static readonly Color TaskColor = Colors.Orange;
+        public static readonly Color ChapterColor = Color.FromRgb(255, 0, 255);
+        public static readonly Color PatternColor = Color.FromRgb(64, 176, 255);
     }
 
     public static class ClassificationDefinitions
     {
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("Comment")]
+        [Name(Constants.PatternComment)]
+        internal static ClassificationTypeDefinition PatternCommentClassificationType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("Comment")]
+        [Name(Constants.ChapterComment)]
+        internal static ClassificationTypeDefinition ChapterCommentClassificationType = null;
+
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
         [Name(Constants.ImportantComment)]
@@ -94,13 +114,13 @@ namespace CommentsPlus.CommentClassifier
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
-        [Name(Constants.QuestionComment)]
-        internal static ClassificationTypeDefinition QuestionCommentClassificationType = null;
+        [Name(Constants.SubComment)]
+        internal static ClassificationTypeDefinition SubCommentClassificationType = null;
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
-        [Name(Constants.WtfComment)]
-        internal static ClassificationTypeDefinition WtfCommentClassificationType = null;
+        [Name(Constants.RessourceComment)]
+        internal static ClassificationTypeDefinition RessourceCommentClassificationType = null;
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
@@ -126,8 +146,13 @@ namespace CommentsPlus.CommentClassifier
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("HTML Comment")]
-        [Name(Constants.QuestionHtmlComment)]
-        internal static ClassificationTypeDefinition QuestionHtmlCommentClassificationType = null;
+        [Name(Constants.ChapterHtmlComment)]
+        internal static ClassificationTypeDefinition ChapterHtmlCommentClassificationType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("HTML Comment")]
+        [Name(Constants.SubHtmlComment)]
+        internal static ClassificationTypeDefinition SubHtmlCommentClassificationType = null;
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("HTML Comment")]
@@ -150,8 +175,13 @@ namespace CommentsPlus.CommentClassifier
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("XML Comment")]
-        [Name(Constants.QuestionXmlComment)]
-        internal static ClassificationTypeDefinition QuestionXmlCommentClassificationType = null;
+        [Name(Constants.SubXmlComment)]
+        internal static ClassificationTypeDefinition SubXmlCommentClassificationType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("XML Comment")]
+        [Name(Constants.ChapterXmlComment)]
+        internal static ClassificationTypeDefinition ChapterXmlCommentClassificationType = null;
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("XML Comment")]
@@ -164,6 +194,43 @@ namespace CommentsPlus.CommentClassifier
         internal static ClassificationTypeDefinition TaskXmlCommentClassificationType = null;
 
         #endregion
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.PatternComment)]
+    [Name(Constants.PatternComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class PatternCommentFormat : ClassificationFormatDefinition
+    {
+        public PatternCommentFormat()
+        {
+            this.DisplayName = Constants.PatternComment + " (//++)";
+            this.ForegroundColor = Constants.PatternColor;
+            this.IsBold = true;
+            this.TextDecorations = new System.Windows.TextDecorationCollection();
+            this.TextDecorations.Add(System.Windows.TextDecorations.Underline);
+            this.FontRenderingSize = 20;
+        }
+    }
+
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.ChapterComment)]
+    [Name(Constants.ChapterComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class ChapterCommentFormat : ClassificationFormatDefinition
+    {
+        public ChapterCommentFormat()
+        {
+            this.DisplayName = Constants.ChapterComment + " (//??)";
+            this.ForegroundColor = Constants.ChapterColor;
+            this.IsBold = true;
+            this.TextDecorations = new System.Windows.TextDecorationCollection();
+            this.TextDecorations.Add(System.Windows.TextDecorations.Underline);
+            this.FontRenderingSize = 30;
+        }
     }
 
     [Export(typeof(EditorFormatDefinition))]
@@ -182,29 +249,29 @@ namespace CommentsPlus.CommentClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = Constants.QuestionComment)]
-    [Name(Constants.QuestionComment)]
+    [ClassificationType(ClassificationTypeNames = Constants.SubComment)]
+    [Name(Constants.SubComment)]
     [UserVisible(true)]
     [Order(After = Priority.High)]
-    public sealed class QuestionCommentFormat : ClassificationFormatDefinition
+    public sealed class SubCommentFormat : ClassificationFormatDefinition
     {
-        public QuestionCommentFormat()
+        public SubCommentFormat()
         {
-            this.DisplayName = Constants.QuestionComment + " (//?)";
-            this.ForegroundColor = Constants.QuestionColor;
+            this.DisplayName = Constants.SubComment + " (//?)";
+            this.ForegroundColor = Constants.SubColor;
         }
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = Constants.WtfComment)]
-    [Name(Constants.WtfComment)]
+    [ClassificationType(ClassificationTypeNames = Constants.RessourceComment)]
+    [Name(Constants.RessourceComment)]
     [UserVisible(true)]
     [Order(After = Priority.High)]
-    public sealed class WtfCommentFormat : ClassificationFormatDefinition
+    public sealed class RessourceCommentFormat : ClassificationFormatDefinition
     {
-        public WtfCommentFormat()
+        public RessourceCommentFormat()
         {
-            this.DisplayName = Constants.WtfComment + " (//!?)";
+            this.DisplayName = Constants.RessourceComment + " (//>>)";
             this.ForegroundColor = Constants.WtfColor;
         }
     }
@@ -251,9 +318,9 @@ namespace CommentsPlus.CommentClassifier
             this.ForegroundBrush = new LinearGradientBrush(new GradientStopCollection() {
                 new GradientStop(Colors.Red, 0.0),
                 new GradientStop(Colors.Orange, 0.17),
-                new GradientStop(Colors.Goldenrod, 0.33),
+                new GradientStop(Colors.Yellow, 0.33),
                 new GradientStop(Colors.Lime, 0.5),
-                new GradientStop(Colors.Blue, 0.66),
+                new GradientStop(Color.FromRgb(30,190,255), 0.66),
                 new GradientStop(Colors.Indigo, 0.83),
                 new GradientStop(Colors.Violet, 1.0),
             }, 0.0);
@@ -279,16 +346,34 @@ namespace CommentsPlus.CommentClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = Constants.QuestionHtmlComment)]
-    [Name(Constants.QuestionHtmlComment)]
+    [ClassificationType(ClassificationTypeNames = Constants.SubHtmlComment)]
+    [Name(Constants.SubHtmlComment)]
     [UserVisible(true)]
     [Order(After = Priority.High)]
-    public sealed class QuestionHtmlCommentFormat : ClassificationFormatDefinition
+    public sealed class SubHtmlCommentFormat : ClassificationFormatDefinition
     {
-        public QuestionHtmlCommentFormat()
+        public SubHtmlCommentFormat()
         {
-            this.DisplayName = Constants.QuestionHtmlComment + " (<!--?)";
-            this.ForegroundColor = Constants.QuestionColor;
+            this.DisplayName = Constants.SubHtmlComment + " (<!--?)";
+            this.ForegroundColor = Constants.SubColor;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.ChapterHtmlComment)]
+    [Name(Constants.ChapterHtmlComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class ChapterHtmlCommentFormat : ClassificationFormatDefinition
+    {
+        public ChapterHtmlCommentFormat()
+        {
+            this.DisplayName = Constants.SubHtmlComment + " (<!--??)";
+            this.ForegroundColor = Constants.ChapterColor;
+            this.IsBold = true;
+            this.TextDecorations = new System.Windows.TextDecorationCollection();
+            this.TextDecorations.Add(System.Windows.TextDecorations.Underline);
+            this.FontRenderingSize = 30;
         }
     }
 
@@ -341,16 +426,34 @@ namespace CommentsPlus.CommentClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = Constants.QuestionXmlComment)]
-    [Name(Constants.QuestionXmlComment)]
+    [ClassificationType(ClassificationTypeNames = Constants.SubXmlComment)]
+    [Name(Constants.SubXmlComment)]
     [UserVisible(true)]
     [Order(After = Priority.High)]
-    public sealed class QuestionXmlCommentFormat : ClassificationFormatDefinition
+    public sealed class SubXmlCommentFormat : ClassificationFormatDefinition
     {
-        public QuestionXmlCommentFormat()
+        public SubXmlCommentFormat()
         {
-            this.DisplayName = Constants.QuestionXmlComment + " (<!--?)";
-            this.ForegroundColor = Constants.QuestionColor;
+            this.DisplayName = Constants.SubXmlComment + " (<!--?)";
+            this.ForegroundColor = Constants.SubColor;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.ChapterXmlComment)]
+    [Name(Constants.ChapterXmlComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class ChapterXmlCommentFormat : ClassificationFormatDefinition
+    {
+        public ChapterXmlCommentFormat()
+        {
+            this.DisplayName = Constants.SubXmlComment + " (<!--??)";
+            this.ForegroundColor = Constants.ChapterColor;
+            this.IsBold = true;
+            this.TextDecorations = new System.Windows.TextDecorationCollection();
+            this.TextDecorations.Add(System.Windows.TextDecorations.Underline);
+            this.FontRenderingSize = 30;
         }
     }
 
