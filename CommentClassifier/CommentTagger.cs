@@ -45,14 +45,23 @@ namespace CommentsPlus.CommentClassifier
         static readonly string[] Comments = { "///","//", "'", "#", "<!--"};
 
         static readonly string[] ImportantComments = { "! ","warning ", "important ", "bug ", "issue ", "notice ", "warning:", "important:", "bug:", "issue:", "notice:" };
+        //! Important
         static readonly string[] SubComments = { "? " ,"# ", "sub ", "zone " };
+        //sub sub
         static readonly string[] RessourceComments = { ">> ","source " ,"src ", "ressource ", "url ", "guide ", "see ", "source:", "src:", "ressource:", "url:", "guide:", "see:" }; 
+        //ressource:some ressource do show here
         static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "done ", "done:" };
+        //done:this is over with
         static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
+        //todo this is something yet to be done
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
+        //♥WHOOOHOOO!
         static readonly string[] ChapterComments = { "?? " ,"## ", "chapter ","ch " };
+        //ch Chapter 1
         static readonly string[] PatternComments = {"++ ", "singleton ", "notify ", "dispose ", "constructor ", "finalizer ", "destructor ", "visionary "};
+        //visionary 
         static readonly string[] VersionComments = { "= ", "version ", "v ", "version:" };
+        //version:1.5.9
 
 
         static readonly List<ITagSpan<ClassificationTag>> EmptyTags = new List<ITagSpan<ClassificationTag>>();
