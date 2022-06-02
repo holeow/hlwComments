@@ -42,16 +42,17 @@ namespace CommentsPlus.CommentClassifier
 
         static bool _enabled;
 
-        static readonly string[] Comments = { "///","//", "'", "#", "<!--" ,/*, "/*"*/ };
+        static readonly string[] Comments = { "///","//", "'", "#", "<!--"};
 
-        static readonly string[] ImportantComments = { "! ", "# " }; // #! Shebang not really useful in Python and the like since it already has a meaning!?
-        static readonly string[] SubComments = { "? ","sub ", "zone " };
-        static readonly string[] RessourceComments = { ">> ", "src ", "ressource ", "url ", "guide ", "see "/*, "WAT ", "WAT: "*/ }; //ಠ_ಠ
-        static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//" };
+        static readonly string[] ImportantComments = { "! ","warning ", "important ", "bug ", "issue ", "notice ", "warning:", "important:", "bug:", "issue:", "notice:" };
+        static readonly string[] SubComments = { "? " ,"# ", "sub ", "zone " };
+        static readonly string[] RessourceComments = { ">> ","source " ,"src ", "ressource ", "url ", "guide ", "see ", "source:", "src:", "ressource:", "url:", "guide:", "see:" }; 
+        static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "done ", "done:" };
         static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
-        static readonly string[] ChapterComments = { "?? ", "chapter ","ch " }; //シ
-        static readonly string[] PatternComments = {"++ ", "singleton ", "notify ", "dispose ", "constructor ", "finalizer "};
+        static readonly string[] ChapterComments = { "?? " ,"## ", "chapter ","ch " };
+        static readonly string[] PatternComments = {"++ ", "singleton ", "notify ", "dispose ", "constructor ", "finalizer ", "destructor ", "visionary "};
+        static readonly string[] VersionComments = { "= ", "version ", "v ", "version:" };
 
 
         static readonly List<ITagSpan<ClassificationTag>> EmptyTags = new List<ITagSpan<ClassificationTag>>();
@@ -62,13 +63,15 @@ namespace CommentsPlus.CommentClassifier
 
         internal CommentTagger(IClassificationTypeRegistryService registry, ITagAggregator<IClassificationTag> aggregator)
         {
-            _classifications = new string[] { Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment}
+            _classifications = new string[]
+                {
+                    Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment, Constants.VersionComment  }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment }
+            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment, Constants.VersionHtmlComment, Constants.ChapterHtmlComment , Constants.RainbowComment, Constants.PatternComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment }
+            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment, Constants.VersionXmlComment, Constants.ChapterXmlComment , Constants.RainbowComment, Constants.PatternComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
             _aggregator = aggregator;
@@ -202,6 +205,10 @@ namespace CommentsPlus.CommentClassifier
                     {
                         ctag = lookup[Classification.Sub];
                     }
+                    else if (Match(text, startIndex, VersionComments, out match))
+                    {
+                        ctag = lookup[Classification.Version];
+                    }
                     else if (Match(text, startIndex, PatternComments, out match))
                     {
                         ctag = lookup[Classification.Pattern];
@@ -318,6 +325,10 @@ namespace CommentsPlus.CommentClassifier
             if (s.Contains("Pattern"))
             {
                 return Classification.Pattern;
+            }
+            if (s.Contains("Version"))
+            {
+                return Classification.Version;
             }
 
             throw new ArgumentException($"Unknown classification type");

@@ -49,7 +49,8 @@ namespace CommentsPlus.CommentClassifier
         Task,
         Rainbow,
         Chapter,
-        Pattern
+        Pattern,
+        Version
     }
 
     /*!? Normal comment - should be italics '*/
@@ -83,20 +84,31 @@ namespace CommentsPlus.CommentClassifier
 
         public const string PatternComment = "hlwComment - Pattern";
 
+        public const string VersionComment = "hlwComment - Version";
+        public const string VersionHtmlComment = "hlwComment HTML - Version";
+        public const string VersionXmlComment = "hlwComment XML - Version";
+
         //x public const string LargeComment = "Comment + Large";
         //x public const string LargerComment = "Comment ++ Large";
 
         public static readonly Color ImportantColor = Colors.Red;
         public static readonly Color SubColor = Color.FromRgb(255, 0, 255);
-        public static readonly Color WtfColor = Colors.DarkSeaGreen;
+        public static readonly Color RessourceColor = Color.FromRgb(0, 190, 164);
         public static readonly Color RemovedColor = Colors.Gray;
         public static readonly Color TaskColor = Colors.Orange;
         public static readonly Color ChapterColor = Color.FromRgb(255, 0, 255);
         public static readonly Color PatternColor = Color.FromRgb(64, 176, 255);
+        public static readonly Color VersionColor = Color.FromRgb(224, 176, 255);
+
     }
 
     public static class ClassificationDefinitions
     {
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("Comment")]
+        [Name(Constants.VersionComment)]
+        internal static ClassificationTypeDefinition VersionCommentClassificationType = null;
+
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
         [Name(Constants.PatternComment)]
@@ -141,6 +153,11 @@ namespace CommentsPlus.CommentClassifier
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("HTML Comment")]
+        [Name(Constants.VersionHtmlComment)]
+        internal static ClassificationTypeDefinition VersionHtmlCommentClassificationType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("HTML Comment")]
         [Name(Constants.ImportantHtmlComment)]
         internal static ClassificationTypeDefinition ImportantHtmlCommentClassificationType = null;
 
@@ -167,6 +184,12 @@ namespace CommentsPlus.CommentClassifier
         #endregion
 
         #region XML
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("XML Comment")]
+        [Name(Constants.VersionXmlComment)]
+        internal static ClassificationTypeDefinition VersionXmlCommentClassificationType = null;
+
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("XML Comment")]
@@ -249,6 +272,21 @@ namespace CommentsPlus.CommentClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.VersionComment)]
+    [Name(Constants.VersionComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class VersionCommentFormat : ClassificationFormatDefinition
+    {
+        public VersionCommentFormat()
+        {
+            this.DisplayName = Constants.VersionComment + " (//=)";
+            this.ForegroundColor = Constants.VersionColor;
+            this.IsBold = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.SubComment)]
     [Name(Constants.SubComment)]
     [UserVisible(true)]
@@ -272,7 +310,7 @@ namespace CommentsPlus.CommentClassifier
         public RessourceCommentFormat()
         {
             this.DisplayName = Constants.RessourceComment + " (//>>)";
-            this.ForegroundColor = Constants.WtfColor;
+            this.ForegroundColor = Constants.RessourceColor;
         }
     }
 
@@ -341,6 +379,21 @@ namespace CommentsPlus.CommentClassifier
         {
             this.DisplayName = Constants.ImportantHtmlComment + " (<!--!)";
             this.ForegroundColor = Constants.ImportantColor;
+            this.IsBold = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.VersionHtmlComment)]
+    [Name(Constants.VersionHtmlComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class VersionHtmlCommentFormat : ClassificationFormatDefinition
+    {
+        public VersionHtmlCommentFormat()
+        {
+            this.DisplayName = Constants.VersionHtmlComment + " (<!--=)";
+            this.ForegroundColor = Constants.VersionColor;
             this.IsBold = true;
         }
     }
@@ -424,6 +477,22 @@ namespace CommentsPlus.CommentClassifier
             this.IsBold = true;
         }
     }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.VersionXmlComment)]
+    [Name(Constants.VersionXmlComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class VersionXmlCommentFormat : ClassificationFormatDefinition
+    {
+        public VersionXmlCommentFormat()
+        {
+            this.DisplayName = Constants.VersionXmlComment + " (<!--=)";
+            this.ForegroundColor = Constants.VersionColor;
+            this.IsBold = true;
+        }
+    }
+
 
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.SubXmlComment)]
