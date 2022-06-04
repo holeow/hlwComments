@@ -47,9 +47,9 @@ namespace CommentsPlus.CommentClassifier
     static readonly string[] ImportantComments = { "! ","WARNING ", "IMPORTANT ", "BUG ", "ISSUE ",  "WARNING:", "IMPORTANT:", "BUG:", "ISSUE:" };
         //! Important
         static readonly string[] SuperComments = {"!! ", "SUPER ", "SUPER:", "NOTICE ", "NOTICE:", "README ", "README:", "ABOUT", "ABOUT:"};
-        //
+        //SuPeR important readme infos
         static readonly string[] SubComments = { "? " ,"# ", "SUB ", "ZONE " };
-        // sub
+        //sub subChapter
         static readonly string[] RessourceComments = { ">> ","SOURCE " ,"SRC ", "RESSOURCE ", "URL ", "GUIDE ", "SEE ", "SOURCE:", "SRC:", "RESSOURCE:", "URL:", "GUIDE:", "SEE:","YOUTUBE ","YOUTUBE:", "SO ", "SO:" }; 
         //ressource:some ressource do show here
         static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "DONE ", "DONE:" };
@@ -57,7 +57,7 @@ namespace CommentsPlus.CommentClassifier
         static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
         //todo this is something yet to be done
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
-        //♥WHOOOHOOO!
+        //♥WHOOOHOOO this is so pretty isn't it?!
         static readonly string[] ChapterComments = { "?? " ,"## ", "CHAPTER ","CH ","CHAPTER:","CH:" };
         //ch Chapter 1
         static readonly string[] PatternComments = {"++ ", "SINGLETON ", "NOTIFY ", "DISPOSE ", "CONSTRUCTOR ", "FINALIZER ", "DESTRUCTOR ", "VISIONARY "};
@@ -66,6 +66,9 @@ namespace CommentsPlus.CommentClassifier
         //version:1.5.9
         static readonly string[] ExampleComments = { "% ", "EX ", "EXAMPLE ","EX:", "EXAMPLE:" };
         //EX:DoAsISay(int now);
+
+
+
         static readonly List<ITagSpan<ClassificationTag>> EmptyTags = new List<ITagSpan<ClassificationTag>>();
 
 #pragma warning disable 67
