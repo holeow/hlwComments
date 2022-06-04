@@ -44,26 +44,28 @@ namespace CommentsPlus.CommentClassifier
 
         static readonly string[] Comments = { "///","//", "'", "#", "<!--"};
 
-        static readonly string[] ImportantComments = { "! ","warning ", "important ", "bug ", "issue ", "notice ", "warning:", "important:", "bug:", "issue:", "notice:" };
+    static readonly string[] ImportantComments = { "! ","WARNING ", "IMPORTANT ", "BUG ", "ISSUE ",  "WARNING:", "IMPORTANT:", "BUG:", "ISSUE:" };
         //! Important
-        static readonly string[] SubComments = { "? " ,"# ", "sub ", "zone " };
-        //sub sub
-        static readonly string[] RessourceComments = { ">> ","source " ,"src ", "ressource ", "url ", "guide ", "see ", "source:", "src:", "ressource:", "url:", "guide:", "see:" }; 
+        static readonly string[] SuperComments = {"!! ", "SUPER ", "SUPER:", "NOTICE ", "NOTICE:", "README ", "README:", "ABOUT", "ABOUT:"};
+        //
+        static readonly string[] SubComments = { "? " ,"# ", "SUB ", "ZONE " };
+        // sub
+        static readonly string[] RessourceComments = { ">> ","SOURCE " ,"SRC ", "RESSOURCE ", "URL ", "GUIDE ", "SEE ", "SOURCE:", "SRC:", "RESSOURCE:", "URL:", "GUIDE:", "SEE:","YOUTUBE ","YOUTUBE:", "SO ", "SO:" }; 
         //ressource:some ressource do show here
-        static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "done ", "done:" };
+        static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "DONE ", "DONE:" };
         //done:this is over with
         static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
         //todo this is something yet to be done
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
         //♥WHOOOHOOO!
-        static readonly string[] ChapterComments = { "?? " ,"## ", "chapter ","ch " };
+        static readonly string[] ChapterComments = { "?? " ,"## ", "CHAPTER ","CH ","CHAPTER:","CH:" };
         //ch Chapter 1
-        static readonly string[] PatternComments = {"++ ", "singleton ", "notify ", "dispose ", "constructor ", "finalizer ", "destructor ", "visionary "};
+        static readonly string[] PatternComments = {"++ ", "SINGLETON ", "NOTIFY ", "DISPOSE ", "CONSTRUCTOR ", "FINALIZER ", "DESTRUCTOR ", "VISIONARY "};
         //visionary 
-        static readonly string[] VersionComments = { "= ", "version ", "v ", "version:" };
+        static readonly string[] VersionComments = { "= ", "VERSION ", "V ", "VERSION:" };
         //version:1.5.9
-
-
+        static readonly string[] ExampleComments = { "% ", "EX ", "EXAMPLE ","EX:", "EXAMPLE:" };
+        //EX:DoAsISay(int now);
         static readonly List<ITagSpan<ClassificationTag>> EmptyTags = new List<ITagSpan<ClassificationTag>>();
 
 #pragma warning disable 67
@@ -74,13 +76,13 @@ namespace CommentsPlus.CommentClassifier
         {
             _classifications = new string[]
                 {
-                    Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment, Constants.VersionComment  }
+                    Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment, Constants.VersionComment, Constants.ExampleComment , Constants.SuperComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment, Constants.VersionHtmlComment, Constants.ChapterHtmlComment , Constants.RainbowComment, Constants.PatternComment }
+            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment, Constants.VersionHtmlComment, Constants.ChapterHtmlComment , Constants.RainbowComment, Constants.PatternComment, Constants.ExampleComment,Constants.SuperComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment, Constants.VersionXmlComment, Constants.ChapterXmlComment , Constants.RainbowComment, Constants.PatternComment }
+            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment, Constants.VersionXmlComment, Constants.ChapterXmlComment , Constants.RainbowComment, Constants.PatternComment, Constants.ExampleComment , Constants.SuperComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
             _aggregator = aggregator;
@@ -206,27 +208,35 @@ namespace CommentsPlus.CommentClassifier
                     //¤ int? removedSpanLength = null;
                     ClassificationTag ctag = null;
                     string match;
-                    if (Match(text, startIndex, ImportantComments, out match))
+                    if (Match(text, startIndex, ImportantComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Important];
                     }
-                    else if (Match(text, startIndex, SubComments, out match))
+                    else if (Match(text, startIndex, SubComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Sub];
                     }
-                    else if (Match(text, startIndex, VersionComments, out match))
+                    else if (Match(text, startIndex, SuperComments, StringComparison.OrdinalIgnoreCase, false, out match))
+                    {
+                        ctag = lookup[Classification.Super];
+                    }
+                    else if (Match(text, startIndex, ExampleComments, StringComparison.OrdinalIgnoreCase, false, out match))
+                    {
+                        ctag = lookup[Classification.Example];
+                    }
+                    else if (Match(text, startIndex, VersionComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Version];
                     }
-                    else if (Match(text, startIndex, PatternComments, out match))
+                    else if (Match(text, startIndex, PatternComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Pattern];
                     }
-                    else if (Match(text, startIndex, ChapterComments, out match))
+                    else if (Match(text, startIndex, ChapterComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Chapter];
                     }
-                    else if (Match(text, startIndex, RemovedComments, out match))
+                    else if (Match(text, startIndex, RemovedComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         if (commentType == "//" && match == "//")
                         {
@@ -249,11 +259,11 @@ namespace CommentsPlus.CommentClassifier
                         bool fix = FixTaskComment(text, startIndex, ref match);
                         ctag = lookup[Classification.Task];
                     }
-                    else if (Match(text, startIndex, RessourceComments, out match))
+                    else if (Match(text, startIndex, RessourceComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Ressource];
                     }
-                    else if (Match(text, startIndex, RainbowComments, out match))
+                    else if (Match(text, startIndex, RainbowComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Rainbow];
                     }
@@ -339,6 +349,15 @@ namespace CommentsPlus.CommentClassifier
             {
                 return Classification.Version;
             }
+            if (s.Contains("Example"))
+            {
+                return Classification.Example;
+            }
+            if (s.Contains("Super"))
+            {
+                return Classification.Super;
+            }
+
 
             throw new ArgumentException($"Unknown classification type");
         }

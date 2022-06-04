@@ -50,7 +50,9 @@ namespace CommentsPlus.CommentClassifier
         Rainbow,
         Chapter,
         Pattern,
-        Version
+        Version,
+        Example,
+        Super
     }
 
     /*!? Normal comment - should be italics '*/
@@ -88,6 +90,11 @@ namespace CommentsPlus.CommentClassifier
         public const string VersionHtmlComment = "hlwComment HTML - Version";
         public const string VersionXmlComment = "hlwComment XML - Version";
 
+        public const string ExampleComment = "hlwComment - Example";
+
+        public const string SuperComment = "hlwComment - Super";
+
+
         //x public const string LargeComment = "Comment + Large";
         //x public const string LargerComment = "Comment ++ Large";
 
@@ -99,11 +106,22 @@ namespace CommentsPlus.CommentClassifier
         public static readonly Color ChapterColor = Color.FromRgb(255, 0, 255);
         public static readonly Color PatternColor = Color.FromRgb(64, 176, 255);
         public static readonly Color VersionColor = Color.FromRgb(224, 176, 255);
+        public static readonly Color ExampleColor = Color.FromRgb(150, 255, 0);
 
     }
 
     public static class ClassificationDefinitions
     {
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("Comment")]
+        [Name(Constants.ExampleComment)]
+        internal static ClassificationTypeDefinition ExampleCommentClassificationType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("Comment")]
+        [Name(Constants.SuperComment)]
+        internal static ClassificationTypeDefinition SuperCommentClassificationType = null;
+
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
         [Name(Constants.VersionComment)]
@@ -257,6 +275,24 @@ namespace CommentsPlus.CommentClassifier
     }
 
     [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.SuperComment)]
+    [Name(Constants.SuperComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class SuperCommentFormat : ClassificationFormatDefinition
+    {
+        public SuperCommentFormat()
+        {
+            this.DisplayName = Constants.SuperComment + " (//!!)";
+            this.ForegroundColor = Constants.ImportantColor;
+            this.IsBold = true;
+            this.TextDecorations = new System.Windows.TextDecorationCollection();
+            this.TextDecorations.Add(System.Windows.TextDecorations.Underline);
+            this.FontRenderingSize = 30;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.ImportantComment)]
     [Name(Constants.ImportantComment)]
     [UserVisible(true)]
@@ -268,6 +304,20 @@ namespace CommentsPlus.CommentClassifier
             this.DisplayName = Constants.ImportantComment + " (//!)";
             this.ForegroundColor = Constants.ImportantColor;
             this.IsBold = true;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.ExampleComment)]
+    [Name(Constants.ExampleComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class ExampleCommentFormat : ClassificationFormatDefinition
+    {
+        public ExampleCommentFormat()
+        {
+            this.DisplayName = Constants.ExampleComment + " (//%)";
+            this.ForegroundColor = Constants.ExampleColor;
         }
     }
 
@@ -355,11 +405,10 @@ namespace CommentsPlus.CommentClassifier
             this.DisplayName = Constants.RainbowComment + " (//+?)";
             this.ForegroundBrush = new LinearGradientBrush(new GradientStopCollection() {
                 new GradientStop(Colors.Red, 0.0),
-                new GradientStop(Colors.Orange, 0.17),
-                new GradientStop(Colors.Yellow, 0.33),
-                new GradientStop(Colors.Lime, 0.5),
-                new GradientStop(Color.FromRgb(30,190,255), 0.66),
-                new GradientStop(Colors.Indigo, 0.83),
+                new GradientStop(Colors.Orange, 0.22),
+                new GradientStop(Colors.Yellow, 0.45),
+                new GradientStop(Colors.Lime, 0.65),
+                new GradientStop(Color.FromRgb(30,190,255), 0.89),
                 new GradientStop(Colors.Violet, 1.0),
             }, 0.0);
             this.IsBold = true;
