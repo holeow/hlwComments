@@ -20,6 +20,9 @@ namespace CommentsPlus.Overview
 
         public const string guidImagesString = "45a79d00-89c0-4bfa-846e-2feeb097e18f";
         public static Guid guidImages = new Guid(guidImagesString);
+
+        public const string CommandSetGuidString = "dfea86e1-99d5-49e5-86e1-6b9068613fa8";
+        public static Guid CommandSetGuid = new Guid(CommandSetGuidString);
     }
     /// <summary>
     /// Helper class that encapsulates all CommandIDs uses across VS Package.
@@ -33,5 +36,8 @@ namespace CommentsPlus.Overview
         public const int bmpPicX = 0x0004;
         public const int bmpPicArrows = 0x0005;
         public const int bmpPicStrikethrough = 0x0006;
+        public const int TopMenuId = 0x1002;
+        public const int TopMenuGroupId = 0x1012;
+        public const int OverViewWindowCommandId = 0x0100;
     }
 }
