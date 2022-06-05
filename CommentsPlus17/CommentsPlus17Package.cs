@@ -39,6 +39,8 @@ namespace CommentsPlus
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[Guid(CommentsPlus17Package.PackageGuidString)]
+	[ProvideMenuResource("Menus.ctmenu", 1)]
+	[ProvideToolWindow(typeof(CommentsPlus.Overview.OverviewWindow))]
 	public sealed class CommentsPlus17Package : AsyncPackage
 	{
         //>> We store a solution service
@@ -107,6 +109,7 @@ namespace CommentsPlus
 
                 // ViewModelLocator.Instance.Scanner.ScanSolution();
             }
+		    await CommentsPlus.Overview.OverviewWindowCommand.InitializeAsync(this);
 
 
         }

@@ -50,6 +50,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <VSCTCompile Include="Overview\CommentsPlus17Package.vsct">
+      <Generator>VsctGenerator</Generator>
+      <ResourceName>Menus.ctmenu</ResourceName>
+      <LastGenOutput>CommentsPlus17Package.cs</LastGenOutput>
+    </VSCTCompile>
+    <Content Include="Overview\Resources\OverviewWindowCommand.png" />
     <Content Include="RACCOON_SELECTEDx96.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -59,11 +65,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +104,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommentsPlus17Package.cs" />
+    <Compile Include="Overview\CommentsPlus17Package.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommentsPlus17Package.vsct</DependentUpon>
+    </Compile>
+    <Compile Include="Overview\OverviewWindow.cs" />
+    <Compile Include="Overview\OverviewWindowCommand.cs" />
+    <Compile Include="Overview\OverviewWindowControl.xaml.cs">
+      <DependentUpon>OverviewWindowControl.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Overview\OverviewWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="..\CommentsPlusShared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
