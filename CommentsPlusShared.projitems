@@ -9,11 +9,33 @@
     <Import_RootNamespace>CommentsPlus</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DteRefs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DteUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\DesignerPlatformLibrary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\IExecuteWithObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\IExecuteWithObjectAndResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ObservableCollectionExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\RelayCommandGeneric.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\WeakAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\WeakActionGeneric.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\WeakFunc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\WeakFuncGeneric.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommentClassifier\Classifications.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommentClassifier\CommentTagger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods\ExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ItalicComments\FormatMapWatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ItalicComments\ViewCreationListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\BookmarkScanner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\BookmarkViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\CommentExtract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\CommentTaggerProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\CSharpCommentExtractor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\IBookmarkExtractor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\ProjectViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\ViewModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\ViewModelLocator.cs" />
   </ItemGroup>
 </Project>

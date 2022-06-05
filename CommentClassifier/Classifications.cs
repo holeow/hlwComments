@@ -8,38 +8,10 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace CommentsPlus.CommentClassifier
 {
-    //The quick brown fox jumps over the lazy dog
-    //! Important note
-    //? What's all this?
-    //TODO Work remaining
-    //ToDo@NN: Some work remaining for you
-    //x object q = dt(42); //What is your question?
-    //// double pi = Math.PI;
-    //!? Wait, what‽
 
-    //TODO: More work remaining
-    // TODO: Even more work remaining
 
-    //# Bold Test
-    //¤ Removed ¤
-    //x Removed x
-    //WTF I don't even?
-    //‽ Not in the slightest
-    //HACK Hackety hack ack!
-    //HACK: Not a crack
-    // HACK: Slash!
-    /////////////////////////////////////////
-    ////string commentedOut = OldMethod(a++); /* an old style comment */
 
-    /*? hallo for en kommentar!? */
-    /*! A long comment - will it get bold!? 
-     * Should this be bold as well?
-     * Another line
-   */
-
-    //+? The quick brown fox jumps over the lazy dog! 0123456789 AbBbCcDdEeFf Jackdaws love my big sphinx of quartz.
-
-    enum Classification
+    public enum Classification
     {
         None,
         Important,
@@ -52,28 +24,25 @@ namespace CommentsPlus.CommentClassifier
         Pattern,
         Version,
         Example,
-        Super
+        Super,
+        Debug
     }
 
     /*!? Normal comment - should be italics '*/
     static class Constants
     {
-        //! Important
         public const string ImportantComment = "hlwComment - Important";
         public const string ImportantHtmlComment = "hlwComment HTML - Important";
         public const string ImportantXmlComment = "hlwComment XML - Important";
-        //? Question
         public const string SubComment = "hlwComment - Sub";
         public const string SubHtmlComment = "hlwComment HTML - Sub";
         public const string SubXmlComment = "hlwComment XML - Sub";
-        //!? WAT
         public const string RessourceComment = "hlwComment - Ressource";
 
         //x Removed
         public const string RemovedComment = "hlwComment - Removed";
         public const string RemovedHtmlComment = "hlwComment HTML - Removed";
         public const string RemovedXmlComment = "hlwComment XML - Removed";
-        //TODO: This does not need work
         public const string TaskComment = "hlwComment - Task";
         public const string TaskHtmlComment = "hlwComment HTML - Task";
         public const string TaskXmlComment = "hlwComment XML - Task";
@@ -93,7 +62,7 @@ namespace CommentsPlus.CommentClassifier
         public const string ExampleComment = "hlwComment - Example";
 
         public const string SuperComment = "hlwComment - Super";
-
+        public const string DebugComment = "hlwComment - Debug";
 
         //x public const string LargeComment = "Comment + Large";
         //x public const string LargerComment = "Comment ++ Large";
@@ -107,6 +76,7 @@ namespace CommentsPlus.CommentClassifier
         public static readonly Color PatternColor = Color.FromRgb(64, 176, 255);
         public static readonly Color VersionColor = Color.FromRgb(224, 176, 255);
         public static readonly Color ExampleColor = Color.FromRgb(150, 255, 0);
+        public static readonly Color DebugColor = Color.FromRgb(123, 60, 255);
 
     }
 
@@ -116,6 +86,11 @@ namespace CommentsPlus.CommentClassifier
         [BaseDefinition("Comment")]
         [Name(Constants.ExampleComment)]
         internal static ClassificationTypeDefinition ExampleCommentClassificationType = null;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [BaseDefinition("Comment")]
+        [Name(Constants.DebugComment)]
+        internal static ClassificationTypeDefinition DebugCommentClassificationType = null;
 
         [Export(typeof(ClassificationTypeDefinition))]
         [BaseDefinition("Comment")]
@@ -307,6 +282,21 @@ namespace CommentsPlus.CommentClassifier
         }
     }
 
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = Constants.DebugComment)]
+    [Name(Constants.DebugComment)]
+    [UserVisible(true)]
+    [Order(After = Priority.High)]
+    public sealed class DebugCommentFormat : ClassificationFormatDefinition
+    {
+        public DebugCommentFormat()
+        {
+            this.DisplayName = Constants.DebugComment + " (//*)";
+            this.ForegroundColor = Constants.DebugColor;
+            this.IsBold = true;
+        }
+    }
+    
     [Export(typeof(EditorFormatDefinition))]
     [ClassificationType(ClassificationTypeNames = Constants.ExampleComment)]
     [Name(Constants.ExampleComment)]

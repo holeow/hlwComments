@@ -55,7 +55,7 @@ namespace CommentsPlus.CommentClassifier
         static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "DONE ", "DONE:" };
         //done:this is over with
         static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
-        //todo this is something yet to be done
+        
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
         //♥WHOOOHOOO this is so pretty isn't it?!
         static readonly string[] ChapterComments = { "?? " ,"## ", "CHAPTER ","CH ","CHAPTER:","CH:" };
@@ -66,8 +66,18 @@ namespace CommentsPlus.CommentClassifier
         //version:1.5.9
         static readonly string[] ExampleComments = { "% ", "EX ", "EXAMPLE ","EX:", "EXAMPLE:" };
         //EX:DoAsISay(int now);
+        static readonly string[] DebugComments = { "* ", "debug ", "log ", "debug:", "log:", "test ", "test:"};
+        
 
+        public static (Classification classification, string[] tags)[] BookmarkTags =
+        {
 
+            (Classification.Super, SuperComments),
+            (Classification.Chapter, ChapterComments),
+            (Classification.Task, TaskComments),
+            (Classification.Debug, DebugComments),
+
+        };
 
         static readonly List<ITagSpan<ClassificationTag>> EmptyTags = new List<ITagSpan<ClassificationTag>>();
 
@@ -79,13 +89,13 @@ namespace CommentsPlus.CommentClassifier
         {
             _classifications = new string[]
                 {
-                    Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment, Constants.VersionComment, Constants.ExampleComment , Constants.SuperComment }
+                    Constants.ImportantComment, Constants.SubComment, Constants.RessourceComment, Constants.RemovedComment, Constants.TaskComment, Constants.RainbowComment, Constants.ChapterComment , Constants.PatternComment, Constants.VersionComment, Constants.ExampleComment , Constants.SuperComment , Constants.DebugComment}
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment, Constants.VersionHtmlComment, Constants.ChapterHtmlComment , Constants.RainbowComment, Constants.PatternComment, Constants.ExampleComment,Constants.SuperComment }
+            _htmlClassifications = new string[] { Constants.ImportantHtmlComment, Constants.SubHtmlComment, Constants.RessourceComment, Constants.RemovedHtmlComment, Constants.TaskHtmlComment, Constants.VersionHtmlComment, Constants.ChapterHtmlComment , Constants.RainbowComment, Constants.PatternComment, Constants.ExampleComment,Constants.SuperComment, Constants.DebugComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
-            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment, Constants.VersionXmlComment, Constants.ChapterXmlComment , Constants.RainbowComment, Constants.PatternComment, Constants.ExampleComment , Constants.SuperComment }
+            _xmlClassifications = new string[] { Constants.ImportantXmlComment, Constants.SubXmlComment, Constants.RessourceComment, Constants.RemovedXmlComment, Constants.TaskXmlComment, Constants.VersionXmlComment, Constants.ChapterXmlComment , Constants.RainbowComment, Constants.PatternComment, Constants.ExampleComment , Constants.SuperComment, Constants.DebugComment }
                     .ToDictionary(GetClassification, s => new ClassificationTag(registry.GetClassificationType(s)));
 
             _aggregator = aggregator;
@@ -219,6 +229,10 @@ namespace CommentsPlus.CommentClassifier
                     {
                         ctag = lookup[Classification.Sub];
                     }
+                    else if (Match(text, startIndex, DebugComments, StringComparison.OrdinalIgnoreCase, false, out match))
+                    {
+                        ctag = lookup[Classification.Debug];
+                    }
                     else if (Match(text, startIndex, SuperComments, StringComparison.OrdinalIgnoreCase, false, out match))
                     {
                         ctag = lookup[Classification.Super];
@@ -328,6 +342,7 @@ namespace CommentsPlus.CommentClassifier
 
         static Classification GetClassification(string s)
         {
+            
             if (s.Contains("Important"))
                 return Classification.Important;
             if (s.Contains("Sub"))
@@ -359,6 +374,10 @@ namespace CommentsPlus.CommentClassifier
             if (s.Contains("Super"))
             {
                 return Classification.Super;
+            }
+            if (s.Contains("Debug"))
+            {
+                return Classification.Debug;
             }
 
 
