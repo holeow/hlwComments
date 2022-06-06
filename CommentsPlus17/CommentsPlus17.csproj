@@ -99,9 +99,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="CommentsPlus17Package.cs" />
     <Compile Include="Overview\CommentsPlus17Package.cs">
@@ -114,9 +112,41 @@
     <Compile Include="Overview\OverviewWindowControl.xaml.cs">
       <DependentUpon>OverviewWindowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Overview\ViewModels\OptionsTickerViewModel.cs" />
+    <Compile Include="Overview\ViewModels\OverviewViewModel.cs" />
+    <Compile Include="Overview\ViewModels\SolutionListViewModel.cs" />
+    <Compile Include="Overview\Views\BookmarkView.xaml.cs">
+      <DependentUpon>BookmarkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Overview\Views\FileView.xaml.cs">
+      <DependentUpon>FileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Overview\Views\ProjectView.xaml.cs">
+      <DependentUpon>ProjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Overview\Views\SolutionList.xaml.cs">
+      <DependentUpon>SolutionList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Overview\OverviewWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Overview\Views\BookmarkView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Overview\Views\FileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Overview\Views\ProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Overview\Views\SolutionList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -44,21 +44,21 @@ namespace CommentsPlus.CommentClassifier
 
         static readonly string[] Comments = { "///","//", "'", "#", "<!--"};
 
-    static readonly string[] ImportantComments = { "! ","WARNING ", "IMPORTANT ", "BUG ", "ISSUE ",  "WARNING:", "IMPORTANT:", "BUG:", "ISSUE:" };
+        static readonly string[] ImportantComments = { "! ","WARNING ", "IMPORTANT ", "BUG ", "ISSUE ",  "WARNING:", "IMPORTANT:", "BUG:", "ISSUE:" };
         //! Important
-        static readonly string[] SuperComments = {"!! ", "SUPER ", "SUPER:", "NOTICE ", "NOTICE:", "README ", "README:", "ABOUT", "ABOUT:"};
+        static readonly string[] SuperComments = {"!! ", "SUPER ", "SUPER:", "NOTICE ", "NOTICE:", "README ", "README:", "ABOUT ", "ABOUT:"};
         //SuPeR important readme infos
-        static readonly string[] SubComments = { "? " ,"# ", "SUB ", "ZONE " };
+        static readonly string[] SubComments = { "? " ,"# ", "SUB ", "ZONE ","•" };
         //sub subChapter
         static readonly string[] RessourceComments = { ">> ","SOURCE " ,"SRC ", "RESSOURCE ", "URL ", "GUIDE ", "SEE ", "SOURCE:", "SRC:", "RESSOURCE:", "URL:", "GUIDE:", "SEE:","YOUTUBE ","YOUTUBE:", "SO ", "SO:" }; 
         //ressource:some ressource do show here
         static readonly string[] RemovedComments = { "x ", "¤ ", "// ", "//", "DONE ", "DONE:" };
         //done:this is over with
-        static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:" }; 
+        static readonly string[] TaskComments = { "TODO ", "TODO:", "TODO@", "HACK ", "HACK:", "♦"}; 
         
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
         //♥WHOOOHOOO this is so pretty isn't it?!
-        static readonly string[] ChapterComments = { "?? " ,"## ", "CHAPTER ","CH ","CHAPTER:","CH:" };
+        static readonly string[] ChapterComments = { "?? " ,"## ", "CHAPTER ","CH ","CHAPTER:","CH:","○"};
         //ch Chapter 1
         static readonly string[] PatternComments = {"++ ", "SINGLETON ", "NOTIFY ", "DISPOSE ", "CONSTRUCTOR ", "FINALIZER ", "DESTRUCTOR ", "VISIONARY "};
         //visionary 
@@ -67,15 +67,28 @@ namespace CommentsPlus.CommentClassifier
         static readonly string[] ExampleComments = { "% ", "EX ", "EXAMPLE ","EX:", "EXAMPLE:" };
         //EX:DoAsISay(int now);
         static readonly string[] DebugComments = { "* ", "debug ", "log ", "debug:", "log:", "test ", "test:"};
-        
 
-        public static (Classification classification, string[] tags)[] BookmarkTags =
+
+        public class WatchedClassification
+        {
+            public Classification cls;
+            public bool isWatched;
+            public string[] tags;
+            public WatchedClassification(Classification cls, string[] tags)
+            {
+                this.cls = cls;
+                this.isWatched = true;
+                this.tags = tags;
+            }
+        }
+
+        public static WatchedClassification[] BookmarkTags =
         {
 
-            (Classification.Super, SuperComments),
-            (Classification.Chapter, ChapterComments),
-            (Classification.Task, TaskComments),
-            (Classification.Debug, DebugComments),
+            new WatchedClassification(Classification.Super, SuperComments),
+            new WatchedClassification(Classification.Chapter, ChapterComments),
+            new WatchedClassification(Classification.Task, TaskComments),
+            new WatchedClassification(Classification.Debug, DebugComments),
 
         };
 

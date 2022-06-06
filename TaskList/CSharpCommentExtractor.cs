@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
 using CommentsPlus.CommentClassifier;
 
 namespace VSIX.Package.Comments.Parsers
@@ -104,14 +106,15 @@ namespace VSIX.Package.Comments.Parsers
                   var text = lines[l].Substring(charIndx + 2).TrimStart();
                   var line = l + 1;
 
-                  foreach (var cls in CommentTagger.BookmarkTags)
+                  foreach (var cls in CommentTagger.BookmarkTags.Where(a=> a.isWatched))
                   {
                       foreach (var clsTag in cls.tags)
                       {
                           if (text.StartsWith(clsTag, StringComparison.OrdinalIgnoreCase))
                           {
                               var start = text.IndexOf(clsTag) + clsTag.Length;
-                              result.Add(new CommentExtract(line, charIndx, cls.classification, text.Substring(start).Trim()));
+                              if(start>text.Length) start = text.Length;
+                              result.Add(new CommentExtract(line, charIndx, cls.cls, ">"+text.Substring(start).Trim()));
                           }
                       }
 

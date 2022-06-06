@@ -44,7 +44,7 @@ namespace CommentsPlus.TaskList
             ThreadHelper.ThrowIfNotOnUIThread();
             Logger.Log($"Buffer changed");
 
-            
+  
             ViewModelLocator.Instance.Scanner.ScanActivedocument();
         }
     }

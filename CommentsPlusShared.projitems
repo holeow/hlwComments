@@ -9,6 +9,8 @@
     <Import_RootNamespace>CommentsPlus</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommentsPlus17\Overview\OverviewViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommentsPlus17\Overview\ViewModels\OptionsTickerViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DteRefs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DteUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
@@ -28,6 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods\ExtensionMethods.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ItalicComments\FormatMapWatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ItalicComments\ViewCreationListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskList\BookmarkPaneViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskList\BookmarkScanner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskList\BookmarkViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskList\CommentExtract.cs" />

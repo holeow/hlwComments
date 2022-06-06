@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -7,7 +8,8 @@ using CommentsPlus.MVVM;
 
 namespace CommentsPlus.TaskList
 {
-    public class ProjectViewModel : ViewModelBase
+    //see link:ProjectView.xaml#L10
+    public class ProjectViewModel : ViewModelBase 
     {
         private string classificationFilter;
 
@@ -18,6 +20,16 @@ namespace CommentsPlus.TaskList
         //public BookmarkViewModel SelectedComment { get; set; }
 
         public ObservableCollection<FileViewModel> Files { get; set; }
+
+        public ObservableCollection<FileViewModel> FilteredFiles
+        {
+            get
+            {
+                return Files.Filter(a => a.Bookmarks.Count > 0);
+            }
+        }
+
+        
 
         public string ClassificationFilter
         {
@@ -37,9 +49,15 @@ namespace CommentsPlus.TaskList
             Project = source;
             ProjectName = source.Name;
             this.Files = files;
+            Files.CollectionChanged += Files_CollectionChanged;
+        }
+
+        private void Files_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            RaisePropertyChanged("FilteredFiles");
         }
     }
-
+    //see link:FileView.xaml#L10 
     public class FileViewModel : ViewModelBase
     {
         readonly ObservableCollection<BookmarkViewModel> bookmarks;
