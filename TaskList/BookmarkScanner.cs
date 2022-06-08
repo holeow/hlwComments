@@ -241,7 +241,7 @@ namespace CommentsPlus.TaskList
             }
             else
             {
-                projVm.Files.Add(fileVm);
+                projVm.Files.Insert(0,fileVm);
             }
             Logger.Log($"BookmarkScanner : FINISHED SCANNING ACTTIVE DOCUMENT");
 

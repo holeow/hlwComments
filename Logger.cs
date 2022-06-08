@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿//#undef DEBUG
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -11,7 +11,9 @@ namespace CommentsPlus
         private static int current = 0;
         static Logger()
         {
+#if DEBUG
             AllocConsole();
+#endif
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]

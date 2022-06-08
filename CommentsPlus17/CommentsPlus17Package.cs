@@ -39,6 +39,8 @@ namespace CommentsPlus
     [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 	[Guid(CommentsPlus17Package.PackageGuidString)]
+	[ProvideMenuResource("Menus.ctmenu", 1)]
+	[ProvideToolWindow(typeof(CommentsPlus.Overview.OverviewWindow))]
 	public sealed class CommentsPlus17Package : AsyncPackage
 	{
         //>> We store a solution service
@@ -94,7 +96,11 @@ namespace CommentsPlus
 
             var events = dte2.Events as Events2;
             if (events != null)
+            {
                 ViewModelLocator.Instance.SubscribeToEvents(events);
+                events.TextEditorEvents.LineChanged += TextEditorEvents_LineChanged;
+            }
+                
 
             if (await IsSolutionLoadedAsync())
             {
@@ -107,8 +113,18 @@ namespace CommentsPlus
 
                 // ViewModelLocator.Instance.Scanner.ScanSolution();
             }
+		    await CommentsPlus.Overview.OverviewWindowCommand.InitializeAsync(this);
 
 
+        }
+
+        private void TextEditorEvents_LineChanged(TextPoint StartPoint, TextPoint EndPoint, int Hint)
+        {
+            //super LAST PHASE OF WORK HERE
+            //debug OnLineChanged
+            //TODO use the lineChanged event to do the comment extraction
+            Logger.Log(StartPoint.CreateEditPoint().GetText(EndPoint));
+            
         }
 
         private async Task<bool> IsSolutionLoadedAsync()
