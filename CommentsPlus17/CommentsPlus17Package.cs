@@ -96,7 +96,11 @@ namespace CommentsPlus
 
             var events = dte2.Events as Events2;
             if (events != null)
+            {
                 ViewModelLocator.Instance.SubscribeToEvents(events);
+                events.TextEditorEvents.LineChanged += TextEditorEvents_LineChanged;
+            }
+                
 
             if (await IsSolutionLoadedAsync())
             {
@@ -112,6 +116,15 @@ namespace CommentsPlus
 		    await CommentsPlus.Overview.OverviewWindowCommand.InitializeAsync(this);
 
 
+        }
+
+        private void TextEditorEvents_LineChanged(TextPoint StartPoint, TextPoint EndPoint, int Hint)
+        {
+            //super LAST PHASE OF WORK HERE
+            //debug OnLineChanged
+            //TODO use the lineChanged event to do the comment extraction
+            Logger.Log(StartPoint.CreateEditPoint().GetText(EndPoint));
+            
         }
 
         private async Task<bool> IsSolutionLoadedAsync()

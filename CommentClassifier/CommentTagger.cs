@@ -47,7 +47,7 @@ namespace CommentsPlus.CommentClassifier
         static readonly string[] ImportantComments = { "! ","WARNING ", "IMPORTANT ", "BUG ", "ISSUE ",  "WARNING:", "IMPORTANT:", "BUG:", "ISSUE:" };
         //! Important
         static readonly string[] SuperComments = {"!! ", "SUPER ", "SUPER:", "NOTICE ", "NOTICE:", "README ", "README:", "ABOUT ", "ABOUT:"};
-        //SuPeR important readme infos
+        //x SuPeR important readme infos
         static readonly string[] SubComments = { "? " ,"# ", "SUB ", "ZONE ","•" };
         //sub subChapter
         static readonly string[] RessourceComments = { ">> ","SOURCE " ,"SRC ", "RESSOURCE ", "URL ", "GUIDE ", "SEE ", "SOURCE:", "SRC:", "RESSOURCE:", "URL:", "GUIDE:", "SEE:","YOUTUBE ","YOUTUBE:", "SO ", "SO:" }; 
@@ -59,7 +59,7 @@ namespace CommentsPlus.CommentClassifier
         static readonly string[] RainbowComments = { "+? ","♥" }; //シ  
         //♥WHOOOHOOO this is so pretty isn't it?!
         static readonly string[] ChapterComments = { "?? " ,"## ", "CHAPTER ","CH ","CHAPTER:","CH:","○"};
-        //ch Chapter 1
+        //x ch Chapter 1
         static readonly string[] PatternComments = {"++ ", "SINGLETON ", "NOTIFY ", "DISPOSE ", "CONSTRUCTOR ", "FINALIZER ", "DESTRUCTOR ", "VISIONARY "};
         //visionary 
         static readonly string[] VersionComments = { "= ", "VERSION ", "V ", "VERSION:" };
