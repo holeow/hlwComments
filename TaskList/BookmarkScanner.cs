@@ -51,7 +51,6 @@ namespace CommentsPlus.TaskList
             ThreadHelper.ThrowIfNotOnUIThread();
             if (DteRefs.DTE == null)
             {
-                Logger.Log($"BOOKMARKSCANNER DTEREFS DTE IS NULL");
                 return;
             }
 
@@ -78,7 +77,6 @@ namespace CommentsPlus.TaskList
                 ScanProject(proj);
             }
 
-            Logger.Log($"BookmarkScanner : Solution Scanned");
             //warnings.SyncWarnings();
         }
 
@@ -90,13 +88,32 @@ namespace CommentsPlus.TaskList
 
             if (project.ProjectItems == null)
                 return;
-
+           
             foreach (ProjectItem item in project.ProjectItems)
             {
-                var itemFiles = GetFileViewModels(item);
+                
+                var itemFiles = GetFileViewModels(item).ToList();
+                foreach (ProjectItem subItem in item.ProjectItems)
+                {
+                    var subFiles = GetFileViewModels(subItem).ToList();
+                    foreach (var file in subFiles)
+                    {
+                        if (!itemFiles.Exists(a => a.FilePath == file.FilePath))
+                        {
+                            itemFiles.Add(file);
+                        }
+                    }
+
+                    //itemFiles.AddRange(GetFileViewModels(subItem));
+                }
                 if (itemFiles.Any())
+                {
                     files.AddRange(itemFiles);
+                    
+                }
+                    
             }
+            
 
             if (files.Any())
             {
@@ -108,7 +125,6 @@ namespace CommentsPlus.TaskList
                 Projects.Add(proj);
             }
 
-            Logger.Log($"BookmarkScanner : Project scanned");
             //warnings.SyncWarnings();
         }
 
@@ -142,7 +158,7 @@ namespace CommentsPlus.TaskList
 
         public void ScanFile(string filePath, Project project)
         {
-            Logger.Log($"BookmarkScanner : SCANNING {filePath}");
+            
             ThreadHelper.ThrowIfNotOnUIThread();
 
             if (!File.Exists(filePath) || !IsSupportedFile(filePath))
@@ -156,11 +172,7 @@ namespace CommentsPlus.TaskList
             var bookmarks = new ObservableCollection<BookmarkViewModel>(
             ExtractBookmarks(lines, filePath));
 
-            //todo remove this debug among others.
-            foreach (var bookmark in bookmarks)
-            {
-                Logger.Log($"{bookmark.Classification}");
-            }
+            
 
             var fileVm = new FileViewModel(filePath, bookmarks);
 
@@ -178,8 +190,7 @@ namespace CommentsPlus.TaskList
             {
                 projVm.Files.Add(fileVm);
             }
-            Logger.Log($"BookmarkScanner : FINISHED SCANNING {filePath}");
-            //warnings.SyncWarnings();
+           
         }
 
         public void RemoveFile(string filePath, string projectName)
@@ -202,7 +213,7 @@ namespace CommentsPlus.TaskList
         public void ScanActivedocument()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Logger.Log($"BookmarkScanner : SCANNING ACTTIVE DOCUMENT");
+           
             if (DteRefs.DTE == null)
             {
                 Logger.Log($" dterefs.dte is null!");
@@ -216,11 +227,7 @@ namespace CommentsPlus.TaskList
 
             var bookmarks = ExtractBookmarks(doc);
 
-            //todo remove this debug
-            foreach (var bookmarkViewModel in bookmarks)
-            {
-                Logger.Log($"{bookmarkViewModel.Classification}");
-            }
+           
 
             var fileVm = new FileViewModel(
                doc.FullName,
@@ -233,7 +240,7 @@ namespace CommentsPlus.TaskList
 
             if (projVm == null)
             {
-                Projects.Add(
+                Projects.Insert(0,
                    new ProjectViewModel(project, new ObservableCollection<FileViewModel> { fileVm })
                    {
                        ClassificationFilter = ClassificationFilter
@@ -242,17 +249,18 @@ namespace CommentsPlus.TaskList
             else
             {
                 projVm.Files.Insert(0,fileVm);
+                Projects.Move(Projects.IndexOf(projVm), 0);
             }
-            Logger.Log($"BookmarkScanner : FINISHED SCANNING ACTTIVE DOCUMENT");
 
             //warnings.SyncWarnings();
         }
-
+        
         public void ScanProjectItem(ProjectItem item)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             var project = item.ContainingProject;
+            
             var projVm = Projects.SingleOrDefault(p => p.ProjectName == project.Name);
 
             var files = GetFileViewModels(item);
@@ -385,13 +393,14 @@ namespace CommentsPlus.TaskList
             if (name.EndsWith(".js") || name.EndsWith(".ts"))
                 return new JSCommentExtractor(config);
             */
-            //Todo Handle F#, Python, and Markup files
+            //todo handle other languages
             throw new InvalidOperationException("File type is not supported.");
         }
 
         private bool IsSupportedFile(string fileName)
         {
             var name = fileName.ToLower();
+
             return name.EndsWith(".cs");
             //|| name.EndsWith(".xaml")
             //|| name.EndsWith(".html")

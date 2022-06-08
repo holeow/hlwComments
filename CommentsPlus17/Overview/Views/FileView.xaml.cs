@@ -24,5 +24,6 @@ namespace CommentsPlus.Overview.Views
         {
             InitializeComponent();
         }
+        //debug xaml.cs file debug
     }
 }

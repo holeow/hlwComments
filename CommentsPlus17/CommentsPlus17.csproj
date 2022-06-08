@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="ABOUT\ABOUT.cs" />
     <Compile Include="CommentsPlus17Package.cs" />
     <Compile Include="Overview\CommentsPlus17Package.cs">
       <AutoGen>True</AutoGen>

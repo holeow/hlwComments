@@ -9,6 +9,7 @@
     <Import_RootNamespace>CommentsPlus</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ABOUT\ABOUT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommentsPlus17\Overview\OverviewViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommentsPlus17\Overview\ViewModels\OptionsTickerViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DteRefs.cs" />
@@ -40,5 +41,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)TaskList\ProjectViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskList\ViewModelBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskList\ViewModelLocator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)CommentsPlus16\" />
   </ItemGroup>
 </Project>

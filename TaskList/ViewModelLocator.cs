@@ -9,9 +9,9 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 
-//todo remove debug lines once figured out.
 namespace CommentsPlus.TaskList
 {
+    //## ProjectHierarchy
     public class ProjectHierarchy : IVsHierarchyEvents
     {
         public IVsHierarchy vsHierarchy;
@@ -37,14 +37,11 @@ namespace CommentsPlus.TaskList
             //Logger.Log("Item Added");
             //Logger.Log($"Project {Project?.Name}");
             vsHierarchy.GetCanonicalName(itemidAdded, out var fullName);
-            Logger.Log($"ProjectHierarchy Item Added Canonical Name : {fullName}");
 
             vsHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_FirstChild, out object item);
             var itemName = item as string;
-            Logger.Log($"ProjectHierarchy Item added Get Property : {itemName}");
 
-            Logger.Log($"ProjectHierarchy Item added Project: {Project?.Name}");
-            vsHierarchy.GetCanonicalName(itemidParent, out var pName);
+            //vsHierarchy.GetCanonicalName(itemidParent, out var pName);
             //Logger.Log($"Parent Canonical Name : {pName}");
 
             ////  Logger.Log($"itemidParent : {itemidParent}");
@@ -59,8 +56,6 @@ namespace CommentsPlus.TaskList
 
         public int OnItemsAppended(uint itemidParent)
         {
-            vsHierarchy.GetCanonicalName(itemidParent, out var fullName);
-            Logger.Log($"ProjectHierarchy Items Appended parent: {fullName}");
             return 1;
         }
 
@@ -71,11 +66,9 @@ namespace CommentsPlus.TaskList
             //Logger.Log("Item Deleted");
             //Logger.Log($"Project {Project?.Name}");
             vsHierarchy.GetCanonicalName(itemid, out var name);
-            Logger.Log($"ProjectHierarchy Item deleted :Canonical Name : {name}");
-
+            
             vsHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_FirstChild, out object item);
             var itemName = item as string;
-            Logger.Log($"ProjectHierarchy Item deleted Get Property : {itemName}");
 
             //Logger.Log($"id : {itemid}");
             //Logger.Log("-------------------");
@@ -110,7 +103,6 @@ namespace CommentsPlus.TaskList
 
     //## ViewModelLocator
     
-    //todo remove commented code here !
     public class ViewModelLocator : IVsSolutionEvents3
     {
         private static ViewModelLocator instance;
@@ -137,18 +129,14 @@ namespace CommentsPlus.TaskList
             }
         }
 
-        //! Commented here
         public BookmarksPaneViewModel BookmarksListViewModel { get; }
 
         public BookmarkScanner Scanner { get; }
-        //! end of comment
 
         private ViewModelLocator()
         {
-            //! Commented here
             Scanner = new BookmarkScanner(/*ConfigService.Current.CommentConfiguration*/);
             BookmarksListViewModel = new BookmarksPaneViewModel(/*ConfigService.Current.CommentConfiguration,*/ Scanner);
-            //! end of comment
             //Scanner.ScanSolution();
         }
 

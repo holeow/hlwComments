@@ -21,28 +21,7 @@ namespace CommentsPlus.TaskList
 
         public RelayCommand ScanSolutionCommand { get; set; }
 
-        //debug
-        //todo remove the debug
-        public RelayCommand DebugSolutionCommand { get; set; }
-
-        public void DebugSolution()
-        {
-            foreach (var project in Projects)
-            {
-                Logger.Log("PN : "+project.ProjectName);
-                foreach (var fileViewModel in project.Files)
-                {
-                    Logger.Log(("FN : " + fileViewModel.FilePath));
-                    foreach (var bookmarkViewModel in fileViewModel.Bookmarks)
-                    {
-                        Logger.Log($"({fileViewModel.FilePath == DteRefs.DTE2.ActiveDocument.Path + DteRefs.DTE2.ActiveDocument.Name}){bookmarkViewModel.Classification} : {bookmarkViewModel.Content}");
-                    }
-                }
-            }
-            
-        }
-
-        //! End of debug
+        
 
         public string SelectedClassificationFilter
         {
@@ -66,7 +45,6 @@ namespace CommentsPlus.TaskList
             this.scanner = scanner;
 
             ScanSolutionCommand = new RelayCommand(scanner.ScanSolution, () => true);
-            DebugSolutionCommand = new RelayCommand(DebugSolution, () => true);
             SetClassificationFilters();
 
             SelectedClassificationFilter = "Any";
