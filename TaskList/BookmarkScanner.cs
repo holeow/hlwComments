@@ -195,6 +195,7 @@ namespace CommentsPlus.TaskList
 
         public void RemoveFile(string filePath, string projectName)
         {
+            if (filePath == null) return;
             openDocs.Remove(filePath);
 
             var project = Projects.SingleOrDefault(p => p.ProjectName == projectName);
@@ -333,19 +334,23 @@ namespace CommentsPlus.TaskList
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (openDocs.ContainsKey(item.FileNames[0]))
+
+            //? solution to bug: IsSupportedFile
+            if (!IsSupportedFile(item.Name)) return new List<FileViewModel>();
+            if(item.Document == null) return new List<FileViewModel>();
+            if (openDocs.ContainsKey(item.Document.FullName))
             {
-                var doc = openDocs[item.FileNames[0]];
+                var doc = openDocs[item.Document.FullName];
 
                 return new List<FileViewModel>()
-            {
-               new FileViewModel(
-                  item.FileNames[0],
-                  new ObservableCollection<BookmarkViewModel>(ExtractBookmarks(doc)))
-               {
-                  ClassificationFilter = ClassificationFilter
-               }
-            };
+                {
+                    new FileViewModel(
+                        item.FileNames[0],
+                        new ObservableCollection<BookmarkViewModel>(ExtractBookmarks(doc)))
+                    {
+                        ClassificationFilter = ClassificationFilter
+                    }
+                };
             }
 
             var files = new List<FileViewModel>();
@@ -353,16 +358,16 @@ namespace CommentsPlus.TaskList
             if (item == null)
                 return files;
 
-            if (File.Exists(item.FileNames[0]) && IsSupportedFile(item.Name))
+            if (File.Exists(item.Document.FullName) && IsSupportedFile(item.Name))
             {
-                var lines = File.ReadAllLines(item.FileNames[0]).ToArray();
+                var lines = File.ReadAllLines(item.Document.FullName).ToArray();
 
                 var bookmarks = new ObservableCollection<BookmarkViewModel>(
-                   ExtractBookmarks(lines, item.FileNames[0]));
+                   ExtractBookmarks(lines, item.Document.FullName));
 
                 if (bookmarks.Any())
                 {
-                    files.Add(new FileViewModel(item.FileNames[0], bookmarks)
+                    files.Add(new FileViewModel(item.Document.FullName, bookmarks)
                     {
                         ClassificationFilter = ClassificationFilter
                     });
