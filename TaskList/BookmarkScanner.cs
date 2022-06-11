@@ -71,18 +71,51 @@ namespace CommentsPlus.TaskList
                        currDoc);
                 }
             }
+            
 
-            foreach (var proj in DteUtils.GetProjects(DteRefs.DTE2))
+            var projects = DteUtils.GetProjects(DteRefs.DTE2);
+
+            foreach (var proj in projects.Where(a =>
+                         a.FullName.EndsWith(".shproj") || a.FullName.EndsWith(".projitems")))
             {
                 ScanProject(proj);
             }
+
+            foreach (var proj in projects.Where(a =>
+            !a.FullName.EndsWith(".shproj") || !a.FullName.EndsWith(".projitems")))
+            {
+                ScanProject(proj);
+            }
+            //foreach (var proj in DteUtils.GetProjects(DteRefs.DTE2))
+            //{
+            //    ScanProject(proj);
+            //}
 
             //warnings.SyncWarnings();
         }
 
         public void ScanProject(Project project)
         {
+
+            bool AlreadyExists(FileViewModel fvm)
+            {
+                foreach (var projectViewModel in Projects)
+                {
+                    if (projectViewModel.Files.SingleOrDefault(a => a.FilePath == fvm.FilePath) != null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            //debug trying to get shproj file
+            Logger.Log($"{project.FullName}");
+            //>> .csproj for normal projects
+            //>> shared projects return one shproj file and one projitems file.
+
 
             var files = new List<FileViewModel>();
 
@@ -92,7 +125,19 @@ namespace CommentsPlus.TaskList
             foreach (ProjectItem item in project.ProjectItems)
             {
                 
-                var itemFiles = GetFileViewModels(item).ToList();
+                var fvm = GetFileViewModels(item).ToList();
+                var itemFiles =  new List<FileViewModel>();
+                foreach (var file in fvm)
+                {
+                    
+                    if(!AlreadyExists(file))
+                        itemFiles.Add(file);
+
+                   
+                   
+
+                }
+
                 foreach (ProjectItem subItem in item.ProjectItems)
                 {
                     var subFiles = GetFileViewModels(subItem).ToList();
@@ -100,7 +145,8 @@ namespace CommentsPlus.TaskList
                     {
                         if (!itemFiles.Exists(a => a.FilePath == file.FilePath))
                         {
-                            itemFiles.Add(file);
+                            if(!AlreadyExists(file))
+                                itemFiles.Add(file);
                         }
                     }
 
@@ -334,10 +380,13 @@ namespace CommentsPlus.TaskList
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-
+            
             //? solution to bug: IsSupportedFile
             if (!IsSupportedFile(item.Name)) return new List<FileViewModel>();
-            if(item.Document == null) return new List<FileViewModel>();
+
+            
+
+            if (item.Document == null) return new List<FileViewModel>();
             if (openDocs.ContainsKey(item.Document.FullName))
             {
                 var doc = openDocs[item.Document.FullName];

@@ -1,9 +1,10 @@
 ﻿//about in shared
 
-//todo BUG Things going in wrong places
-// Dedoubled links when having multiple projects
-//! is the first project receiving the things from the other ones?
-
+//x todo BUG Things going in wrong places
+// Dedoubled links with shared projects
+//! solution might be to check first sharedProjects somehow, then check if files come from the shared things (hopefully there won't be shared projects between shared projects?)
+//x now scanning first shared projects
+//x todo don't scan files that are already added to the tasklist.
 
 
 //x todo BUG xaml.cs files not read when scanning solution...
