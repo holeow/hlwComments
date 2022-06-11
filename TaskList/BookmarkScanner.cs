@@ -111,11 +111,7 @@ namespace CommentsPlus.TaskList
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            //debug trying to get shproj file
-            Logger.Log($"{project.FullName}");
-            //>> .csproj for normal projects
-            //>> shared projects return one shproj file and one projitems file.
-
+            
 
             var files = new List<FileViewModel>();
 
@@ -348,7 +344,8 @@ namespace CommentsPlus.TaskList
                           Line = ce.Line,
                           Column = ce.Column,
                           Classification = ce.Classification,
-                          Content = ce.Content
+                          Content = ce.Content,
+                          ExactText = ce.ExactString
                       });
 
             }

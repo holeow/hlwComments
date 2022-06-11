@@ -24,3 +24,12 @@
 
 //x todo BUG on certain solutions, thing was crashing all around where project items had no filenames
 //SOLUTION only scan files for which extension was known  link:BookmarkScanner.cs://?%20solution%20to%20bug:%20IsSupportedFile
+
+//todo fix: Empty projects appear in the list.
+
+
+//todo make scrolling on items of the tasklist scroll the parent listview
+//making the scrollbars not appear didn't fix it.
+//actually it might have half fixed it. Scrolling on projects work, but it seems scrolling on child of chilf doesn't work on grand parent.
+
+//todo add link copy on alt+click

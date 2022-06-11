@@ -10,7 +10,7 @@
     <!--see link:ProjectViewModel.cs:public%20class%20FileViewModel --> 
     <Grid>
         <GroupBox Header="{Binding FileName, FallbackValue='Filename.cs'}" Foreground="White" BorderThickness="0.5" Margin="3,5">
-            <ListView ItemsSource="{Binding Bookmarks}" Background="{x:Null}" BorderBrush="{x:Null}">
+            <ListView ItemsSource="{Binding Bookmarks}" Background="{x:Null}" BorderBrush="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:BookmarkView></local:BookmarkView>

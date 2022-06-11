@@ -114,7 +114,7 @@ namespace VSIX.Package.Comments.Parsers
                           {
                               var start = text.IndexOf(clsTag) + clsTag.Length;
                               if(start>text.Length) start = text.Length;
-                              result.Add(new CommentExtract(line, charIndx, cls.cls, ">"+text.Substring(start).Trim()));
+                              result.Add(new CommentExtract(line, charIndx, cls.cls, ">"+text.Substring(start).Trim(), text.Trim()));
                           }
                       }
 

@@ -10,7 +10,7 @@
     <!--see link:ProjectViewModel.cs -->
     <Grid>
         <GroupBox Header="{Binding ProjectName, FallbackValue='My Project'}" Foreground="#FFE3E3E3" FontWeight="ExtraBold">
-            <ListView ItemsSource="{Binding FilteredFiles}" Background="{x:Null}" BorderBrush="{x:Null}">
+            <ListView ItemsSource="{Binding FilteredFiles}" Background="{x:Null}" BorderBrush="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <local:FileView></local:FileView>

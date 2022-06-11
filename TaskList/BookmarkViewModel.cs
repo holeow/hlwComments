@@ -22,6 +22,8 @@ namespace CommentsPlus.TaskList
         public Classification Classification { get; set; }
         public string Content { get; set; } = string.Empty;
 
+        public string ExactText { get; set; } = string.Empty;
+
         public string LineText => $"Line: {Line}";
         public SolidColorBrush TextColor
         {
@@ -47,10 +49,12 @@ namespace CommentsPlus.TaskList
         }
 
         public RelayCommand GoToBookmarkCommand { get; }
+        public RelayCommand CopyBookmarkLink { get; }
 
         public BookmarkViewModel()
         {
             GoToBookmarkCommand = new RelayCommand(GoToBookmark, () => true);
+            CopyBookmarkLink = new RelayCommand(CopyBookmark,() => true);
         }
         private void GoToBookmark()
         {
@@ -61,6 +65,21 @@ namespace CommentsPlus.TaskList
 
             DteRefs.DTE.ItemOperations.OpenFile(FilePath);
             DteRefs.DTE.ExecuteCommand("Edit.Goto", Line.ToString());
+        }
+
+        private void CopyBookmark()
+        {
+            string text = $"link:{FileName}:\"{ExactText}\"";
+            try
+            {
+                Clipboard.SetText(text);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Bookmark view model exception while trying to copy link");
+                Logger.Log(ex.Message);
+            }
+            
         }
     }
 
