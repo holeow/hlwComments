@@ -34,4 +34,5 @@
 
 //done todo add link copy on alt+click
 
-//TODO somehow stopped to read files that aren't currently open in scanSolution or scanproject!
+//done TODO somehow stopped to read files that aren't currently open in scanSolution or scanproject!
+//ProjectItem.Document is null if the file is not open in visual studio. Was checking if document was null in the code. Replaced it.

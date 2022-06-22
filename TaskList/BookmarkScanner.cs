@@ -122,9 +122,7 @@ namespace CommentsPlus.TaskList
             foreach (ProjectItem item in project.ProjectItems)
             {
 
-                //debug projectItems
-                Logger.Log($"{item.Name}");
-
+               
                 var fvm = GetFileViewModels(item).ToList();
                 var itemFiles =  new List<FileViewModel>();
                 foreach (var file in fvm)
@@ -382,16 +380,26 @@ namespace CommentsPlus.TaskList
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            
+            //debug item
+            Logger.Log($"item name: {item.Name}");
+
+            //debug item
+            Logger.Log($"is supported: {IsSupportedFile(item.Name)}");
+
             //? solution to bug: IsSupportedFile
             if (!IsSupportedFile(item.Name)) return new List<FileViewModel>();
 
-            
 
-            if (item.Document == null) return new List<FileViewModel>();
-            if (openDocs.ContainsKey(item.Document.FullName))
+            //debug document is null
+            Logger.Log($"document is null {item.Document == null}");
+            //if (item.Document == null) return new List<FileViewModel>();
+
+            //debug openDocs containsKey
+            Logger.Log($"openDocs containsKey {openDocs.ContainsKey(item.FileNames[0])}");
+
+            if (openDocs.ContainsKey(item.FileNames[0]))
             {
-                var doc = openDocs[item.Document.FullName];
+                var doc = openDocs[item.FileNames[0]];
 
                 return new List<FileViewModel>()
                 {
@@ -405,20 +413,23 @@ namespace CommentsPlus.TaskList
             }
 
             var files = new List<FileViewModel>();
-
+            //debug item is null
+            Logger.Log($"item is null {item==null}");
             if (item == null)
                 return files;
 
-            if (File.Exists(item.Document.FullName) && IsSupportedFile(item.Name))
+            //debug fileExists
+            Logger.Log($"{IsSupportedFile(item.Name)},{File.Exists(item.FileNames[0])}");
+            if (IsSupportedFile(item.Name) && File.Exists(item.FileNames[0]) )
             {
-                var lines = File.ReadAllLines(item.Document.FullName).ToArray();
+                var lines = File.ReadAllLines(item.FileNames[0]).ToArray();
 
                 var bookmarks = new ObservableCollection<BookmarkViewModel>(
-                   ExtractBookmarks(lines, item.Document.FullName));
+                   ExtractBookmarks(lines, item.FileNames[0]));
 
                 if (bookmarks.Any())
                 {
-                    files.Add(new FileViewModel(item.Document.FullName, bookmarks)
+                    files.Add(new FileViewModel(item.FileNames[0], bookmarks)
                     {
                         ClassificationFilter = ClassificationFilter
                     });
