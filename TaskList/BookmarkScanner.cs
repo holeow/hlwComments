@@ -380,22 +380,18 @@ namespace CommentsPlus.TaskList
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            //debug item
-            Logger.Log($"item name: {item.Name}");
+            
 
-            //debug item
-            Logger.Log($"is supported: {IsSupportedFile(item.Name)}");
+            
 
             //? solution to bug: IsSupportedFile
             if (!IsSupportedFile(item.Name)) return new List<FileViewModel>();
 
 
-            //debug document is null
-            Logger.Log($"document is null {item.Document == null}");
+       
             //if (item.Document == null) return new List<FileViewModel>();
 
-            //debug openDocs containsKey
-            Logger.Log($"openDocs containsKey {openDocs.ContainsKey(item.FileNames[0])}");
+            
 
             if (openDocs.ContainsKey(item.FileNames[0]))
             {
@@ -413,13 +409,11 @@ namespace CommentsPlus.TaskList
             }
 
             var files = new List<FileViewModel>();
-            //debug item is null
-            Logger.Log($"item is null {item==null}");
+            
             if (item == null)
                 return files;
 
-            //debug fileExists
-            Logger.Log($"{IsSupportedFile(item.Name)},{File.Exists(item.FileNames[0])}");
+            
             if (IsSupportedFile(item.Name) && File.Exists(item.FileNames[0]) )
             {
                 var lines = File.ReadAllLines(item.FileNames[0]).ToArray();
