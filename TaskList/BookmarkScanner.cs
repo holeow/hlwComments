@@ -103,6 +103,7 @@ namespace CommentsPlus.TaskList
                 {
                     if (projectViewModel.Files.SingleOrDefault(a => a.FilePath == fvm.FilePath) != null)
                     {
+                        
                         return true;
                     }
                 }
@@ -120,13 +121,16 @@ namespace CommentsPlus.TaskList
            
             foreach (ProjectItem item in project.ProjectItems)
             {
-                
+
+                //debug projectItems
+                Logger.Log($"{item.Name}");
+
                 var fvm = GetFileViewModels(item).ToList();
                 var itemFiles =  new List<FileViewModel>();
                 foreach (var file in fvm)
                 {
                     
-                    if(!AlreadyExists(file))
+                    if (!AlreadyExists(file))
                         itemFiles.Add(file);
 
                    
@@ -139,6 +143,7 @@ namespace CommentsPlus.TaskList
                     var subFiles = GetFileViewModels(subItem).ToList();
                     foreach (var file in subFiles)
                     {
+                        
                         if (!itemFiles.Exists(a => a.FilePath == file.FilePath))
                         {
                             if(!AlreadyExists(file))

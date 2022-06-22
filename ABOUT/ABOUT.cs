@@ -32,4 +32,6 @@
 //making the scrollbars not appear didn't fix it.
 //actually it might have half fixed it. Scrolling on projects work, but it seems scrolling on child of chilf doesn't work on grand parent.
 
-//todo add link copy on alt+click
+//done todo add link copy on alt+click
+
+//TODO somehow stopped to read files that aren't currently open in scanSolution or scanproject!
